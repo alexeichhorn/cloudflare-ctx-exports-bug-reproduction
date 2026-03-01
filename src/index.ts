@@ -12,8 +12,6 @@ export class OutboundProbe extends WorkerEntrypoint {
 }
 
 export default {
-  async queue(_batch: MessageBatch<unknown>, _env: Env): Promise<void> {},
-
   async fetch(request, env, ctx): Promise<Response> {
     const url = new URL(request.url);
     console.log('[index.fetch] URL:', request.url);
