@@ -12,7 +12,7 @@ export default {
       const directFetchText = await (await outbound.fetch('https://example.com/repro')).text();
 
       const worker = env.LOADER.get('repro-worker', () => ({
-        compatibilityDate: '2026-03-01',
+        compatibilityDate: '2026-02-25',
         mainModule: 'main.js',
         modules: {
           'main.js': {
