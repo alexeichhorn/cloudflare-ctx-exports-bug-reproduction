@@ -1,5 +1,6 @@
 import { ExecutorService } from './services/executor';
 
+export { ProbeDurableObject } from './durable/ProbeDurableObject';
 export { OutboundProbe } from './services/executor';
 
 export default {

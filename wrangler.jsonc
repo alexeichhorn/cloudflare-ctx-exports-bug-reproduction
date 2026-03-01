@@ -5,5 +5,9 @@
   "compatibility_date": "2026-02-25",
   "compatibility_flags": ["nodejs_compat"],
   "observability": { "enabled": true },
-  "worker_loaders": [{ "binding": "LOADER" }]
+  "worker_loaders": [{ "binding": "LOADER" }],
+  "durable_objects": {
+    "bindings": [{ "name": "PROBE_DO", "class_name": "ProbeDurableObject" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["ProbeDurableObject"] }]
 }
