@@ -10,5 +10,8 @@
   "durable_objects": {
     "bindings": [{ "name": "PROBE_DO", "class_name": "ProbeDurableObject" }]
   },
-  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["ProbeDurableObject"] }]
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["ProbeDurableObject"] }],
+  "vars": {
+    "MODEL": "test"
+  }
 }
