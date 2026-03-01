@@ -16,7 +16,3 @@ export default {
     return new Response('FROM_INDEX_DEFAULT');
   },
 } satisfies ExportedHandler<Env>;
-
-interface Env {
-  LOADER: WorkerLoader;
-}
