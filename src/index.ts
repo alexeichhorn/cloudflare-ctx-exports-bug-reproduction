@@ -6,10 +6,10 @@ export default {
     console.log('[index.fetch] URL:', request.url);
 
     if (url.pathname === '/probe') {
-      const outbound = ctx.exports.OutboundProbe({});
-
-      const directRpc = await outbound.someOtherFunc();
-      const directFetchText = await (await outbound.fetch(new Request('https://example.com/repro'))).text();
+      const directRpc = await ctx.exports.OutboundProbe({}).someOtherFunc();
+      const directFetchText = await (
+        await ctx.exports.OutboundProbe({}).fetch(new Request('https://example.com/repro'))
+      ).text();
 
       const worker = env.LOADER.get('repro-worker', () => ({
         compatibilityDate: '2026-02-25',
@@ -29,7 +29,7 @@ export default {
             `,
           },
         },
-        globalOutbound: outbound,
+        globalOutbound: ctx.exports.OutboundProbe({}),
       }));
 
       const loaderResponse = await worker.getEntrypoint().fetch('https://loader-entry/probe');
