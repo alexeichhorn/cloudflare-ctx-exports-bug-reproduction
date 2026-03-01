@@ -3,7 +3,7 @@ node_modules/
 
 # Wrangler / Cloudflare artifacts
 .wrangler/
-worker-configuration.d.ts
+#worker-configuration.d.ts
 
 # Environment files
 .dev.vars*
