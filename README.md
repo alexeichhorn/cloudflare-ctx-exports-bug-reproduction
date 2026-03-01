@@ -1,78 +1,63 @@
-# Cloudflare ctx.exports + worker loader `globalOutbound` repro
+# Repro: `placement` misroutes `ctx.exports` fetch
 
-Minimal reproduction for confusing `ctx.exports`/`globalOutbound` behavior.
+This repo reproduces a production-only Cloudflare Workers issue.
 
-## What this does
+The `/probe` route calls the same entrypoint in two ways:
 
-- Exports a `WorkerEntrypoint` class `OutboundProbe` with:
-  - `fetch()` returning `FROM_OUTBOUND_CLASS ...`
-  - `someOtherFunc()` returning `FROM_RPC_METHOD ...`
-- In default `fetch`, `/probe`:
-  - calls `ctx.exports.OutboundProbe(...).someOtherFunc()`
-  - calls `ctx.exports.OutboundProbe(...).fetch('https://example.com/repro')`
-  - creates a worker loader with `globalOutbound` set to the same export
-  - calls loader worker that performs `fetch('https://example.com/from-loader')`
+- `ctx.exports.OutboundProbe({}).someOtherFunc()` (RPC method)
+- `ctx.exports.OutboundProbe({}).fetch(new Request(...))` (fetch method)
 
-## Run
+Observed behavior:
+
+- Local dev: both calls behave correctly.
+- Production with `placement` enabled: RPC call still works, but `ctx.exports...fetch(...)` is misrouted to main `index.fetch` and returns `FROM_INDEX_DEFAULT`.
+
+## Trigger
+
+- Keeping `placement` enabled reproduces the issue in production.
+- Removing `placement` makes production behave like local.
+- Changing placement region in Cloudflare dashboard (for example US/Asia/EU) still reproduces the same issue while `placement` is enabled. (→ not region-specific)
+
+## Endpoint
+
+`/probe` runs both calls and returns JSON:
+
+- `directRpc` (RPC method call)
+- `directFetchText` (`ctx.exports` fetch call result)
+
+## Expected vs actual
+
+Expected (correct behavior):
+
+```json
+{
+  "directRpc": "FROM_RPC_METHOD ...",
+  "directFetchText": "FROM_OUTBOUND_CLASS ..."
+}
+```
+
+Actual in production when `placement` is enabled:
+
+```json
+{
+  "directRpc": "FROM_RPC_METHOD ...",
+  "directFetchText": "FROM_INDEX_DEFAULT"
+}
+```
+
+## Quick check
+
+Local:
 
 ```bash
 npm install
 npm run dev
-```
-
-Then call:
-
-```bash
 curl -sS http://127.0.0.1:8787/probe | jq
 ```
 
-## Expected signal
-
-- `directRpc` should be `FROM_RPC_METHOD ...` (RPC method works)
-- `directFetchText` should start with `FROM_OUTBOUND_CLASS ...`
-- `loaderFetchText` should start with `FROM_OUTBOUND_CLASS ...`
-- Logs should include:
-  - `[index.fetch] ...`
-  - `[OutboundProbe.fetch] ...`
-
-Expected JSON shape/value pattern:
-
-```json
-{
-  "directRpc": "FROM_RPC_METHOD label=ctx-exports-probe",
-  "directFetchText": "FROM_OUTBOUND_CLASS label=ctx-exports-probe url=https://example.com/repro",
-  "loaderFetchText": "FROM_OUTBOUND_CLASS label=ctx-exports-probe url=https://example.com/from-loader",
-  "note": "If this were hitting OutboundProbe.fetch, both fetch texts should start with FROM_OUTBOUND_CLASS."
-}
-```
-
-## Observed on local dev (`wrangler dev`)
-
-Confirmed output from:
-
-```bash
-curl -sS http://127.0.0.1:8787/probe | jq
-```
-
-```json
-{
-  "directRpc": "FROM_RPC_METHOD label=ctx-exports-probe",
-  "directFetchText": "FROM_OUTBOUND_CLASS label=ctx-exports-probe url=https://example.com/repro",
-  "loaderFetchText": "FROM_OUTBOUND_CLASS label=ctx-exports-probe url=https://example.com/from-loader",
-  "note": "If this were hitting OutboundProbe.fetch, both fetch texts should start with FROM_OUTBOUND_CLASS."
-}
-```
-
-## Observed on deployed worker (production)
-
-TODO: run after deploy and paste output from:
+Prod:
 
 ```bash
 curl -sS "https://<your-worker-url>/probe" | jq
 ```
 
-## Deploy
-
-```bash
-npm run deploy
-```
