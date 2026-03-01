@@ -16,9 +16,9 @@ export class ExecutorService {
   }
 
   async runProbe(): Promise<Response> {
-    const directRpc = await this.runtimeContext.exports.OutboundProbe({}).someOtherFunc();
+    const directRpc = await this.runtimeContext.exports.CachedFetchService({}).someOtherFunc();
     const directFetchText = await (
-      await this.runtimeContext.exports.OutboundProbe({}).fetch(new Request('https://losjet.com'))
+      await this.runtimeContext.exports.CachedFetchService({}).fetch(new Request('https://losjet.com'))
     ).text();
 
     const worker = this.env.LOADER.get('repro-worker', () => ({
@@ -40,7 +40,7 @@ export class ExecutorService {
           `,
         },
       },
-      globalOutbound: this.runtimeContext.exports.OutboundProbe({}),
+      globalOutbound: this.runtimeContext.exports.CachedFetchService({}),
     }));
 
     const loaderResponse = await worker.getEntrypoint().fetch('https://loader-entry/probe');
@@ -50,7 +50,7 @@ export class ExecutorService {
       directRpc,
       directFetchText,
       loaderFetchText: loaderJson.text,
-      note: 'If this were hitting OutboundProbe.fetch, both fetch texts should start with FROM_OUTBOUND_CLASS.',
+      note: 'If this were hitting CachedFetchService.fetch, both fetch texts should start with FROM_OUTBOUND_CLASS.',
     });
   }
 }

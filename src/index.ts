@@ -1,7 +1,7 @@
 import { ExecutorService } from './services/executor';
 
 export { ProbeDurableObject } from './durable/ProbeDurableObject';
-export { OutboundProbe } from './services/executor';
+export { CachedFetchService } from './services/executor';
 
 export default {
   async queue(_batch: MessageBatch<unknown>, _env: Env): Promise<void> {},
