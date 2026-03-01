@@ -61,3 +61,8 @@ Prod:
 curl -sS "https://<your-worker-url>/probe" | jq
 ```
 
+Current deployed repro URL:
+
+```bash
+curl -sS "https://cloudflare-ctx-exports-bug-reproduction.white-meadow-a345.workers.dev/probe" | jq
+```
