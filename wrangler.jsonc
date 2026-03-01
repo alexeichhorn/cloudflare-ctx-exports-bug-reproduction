@@ -6,8 +6,5 @@
   "compatibility_flags": ["nodejs_compat"],
   "observability": { "enabled": true },
   "placement": { "region": "aws:eu-central-1" },
-  "worker_loaders": [{ "binding": "LOADER" }],
-  "vars": {
-    "MODEL": "test"
-  }
+  "worker_loaders": [{ "binding": "LOADER" }]
 }
