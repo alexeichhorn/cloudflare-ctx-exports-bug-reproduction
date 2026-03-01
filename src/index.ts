@@ -6,7 +6,7 @@ export default {
     console.log('[index.fetch] URL:', request.url);
 
     if (url.pathname === '/probe') {
-      const outbound = ctx.exports.OutboundProbe({ props: { label: 'ctx-exports-probe' } });
+      const outbound = ctx.exports.OutboundProbe({});
 
       const directRpc = await outbound.someOtherFunc();
       const directFetchText = await (await outbound.fetch('https://example.com/repro')).text();
