@@ -1,6 +1,8 @@
 export { OutboundProbe } from './services/executor';
 
 export default {
+  async queue(_batch: MessageBatch<unknown>, _env: Env): Promise<void> {},
+
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
     console.log('[index.fetch] URL:', request.url);
