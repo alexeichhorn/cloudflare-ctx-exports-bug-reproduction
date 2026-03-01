@@ -22,7 +22,6 @@ export default {
 
       const worker = env.LOADER.get('repro-worker', () => ({
         compatibilityDate: '2026-02-25',
-        compatibilityFlags: ['nodejs_compat'],
         mainModule: 'main.js',
         modules: {
           'main.js': {
