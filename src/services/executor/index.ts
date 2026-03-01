@@ -1,1 +1,1 @@
-export { CachedFetchService } from './_fetch/service';
+export { OutboundProbe } from './_fetch/service';

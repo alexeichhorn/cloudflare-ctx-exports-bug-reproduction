@@ -1,10 +1,10 @@
 import { WorkerEntrypoint } from 'cloudflare:workers';
 
-export class CachedFetchService extends WorkerEntrypoint {
+export class OutboundProbe extends WorkerEntrypoint {
   private readonly cacheDuration = 3600;
 
   async fetch(request: Request): Promise<Response> {
-    console.log('[CachedFetchService.fetch] URL:', request.url, 'mode:', 'no-props');
+    console.log('[OutboundProbe.fetch] URL:', request.url, 'mode:', 'no-props');
     return new Response(`FROM_OUTBOUND_CLASS mode=no-props url=${request.url}`);
   }
 

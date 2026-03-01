@@ -1,4 +1,4 @@
-export { CachedFetchService } from './services/executor';
+export { OutboundProbe } from './services/executor';
 
 export default {
   async queue(_batch: MessageBatch<unknown>, _env: Env): Promise<void> {},
@@ -8,8 +8,8 @@ export default {
     console.log('[index.fetch] URL:', request.url);
 
     if (url.pathname === '/probe') {
-      const directRpc = await ctx.exports.CachedFetchService({}).someOtherFunc();
-      const directFetchText = await (await ctx.exports.CachedFetchService({}).fetch(new Request('https://losjet.com'))).text();
+      const directRpc = await ctx.exports.OutboundProbe({}).someOtherFunc();
+      const directFetchText = await (await ctx.exports.OutboundProbe({}).fetch(new Request('https://example.com/repro'))).text();
 
       const worker = env.LOADER.get('repro-worker', () => ({
         compatibilityDate: '2026-02-25',
@@ -30,7 +30,7 @@ export default {
             `,
           },
         },
-        globalOutbound: ctx.exports.CachedFetchService({}),
+        globalOutbound: ctx.exports.OutboundProbe({}),
       }));
 
       const loaderResponse = await worker.getEntrypoint().fetch('https://loader-entry/probe');
@@ -40,7 +40,7 @@ export default {
         directRpc,
         directFetchText,
         loaderFetchText: loaderJson.text,
-        note: 'If this were hitting CachedFetchService.fetch, both fetch texts should start with FROM_OUTBOUND_CLASS.',
+        note: 'If this were hitting OutboundProbe.fetch, both fetch texts should start with FROM_OUTBOUND_CLASS.',
       });
     }
 
