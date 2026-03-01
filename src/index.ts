@@ -10,9 +10,14 @@ export default {
     console.log('[index.fetch] URL:', request.url);
 
     if (url.pathname === '/probe') {
-      return new ExecutorService(env, ctx).runProbe();
+      return runProbe(env, ctx);
     }
 
     return new Response('FROM_INDEX_DEFAULT');
   },
 } satisfies ExportedHandler<Env>;
+
+async function runProbe(env: Env, ctx: ExecutionContext): Promise<Response> {
+  const service = new ExecutorService(env, ctx);
+  return service.runProbe();
+}
