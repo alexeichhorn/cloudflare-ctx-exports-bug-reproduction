@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Wrangler / Cloudflare artifacts
+.wrangler/
+worker-configuration.d.ts
+
+# Environment files
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
+*.local.json
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# OS
+.DS_Store
