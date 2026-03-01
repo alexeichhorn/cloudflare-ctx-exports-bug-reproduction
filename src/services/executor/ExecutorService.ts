@@ -29,12 +29,20 @@ export class ExecutorService {
         'main.js': {
           js: `
             export default {
-              async fetch() {
-                const r = await fetch('https://example.com/from-loader');
-                const text = await r.text();
-                return new Response(JSON.stringify({ text }), {
-                  headers: { 'content-type': 'application/json' },
-                });
+              async fetch(request, env) {
+                const __jobstepOriginalFetch = globalThis.fetch.bind(globalThis);
+                const __jobstepFetch = __jobstepOriginalFetch;
+                globalThis.fetch = __jobstepFetch;
+                const fetch = __jobstepFetch;
+                try {
+                  const r = await fetch('https://example.com/from-loader');
+                  const text = await r.text();
+                  return new Response(JSON.stringify({ text }), {
+                    headers: { 'content-type': 'application/json' },
+                  });
+                } finally {
+                  globalThis.fetch = __jobstepOriginalFetch;
+                }
               }
             };
           `,
