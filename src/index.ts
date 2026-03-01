@@ -1,6 +1,5 @@
 import { ExecutorService } from './services/executor';
 
-export { ProbeDurableObject } from './durable/ProbeDurableObject';
 export { CachedFetchService } from './services/executor';
 
 export default {

@@ -7,10 +7,6 @@
   "observability": { "enabled": true },
   "placement": { "region": "aws:eu-central-1" },
   "worker_loaders": [{ "binding": "LOADER" }],
-  "durable_objects": {
-    "bindings": [{ "name": "PROBE_DO", "class_name": "ProbeDurableObject" }]
-  },
-  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["ProbeDurableObject"] }],
   "vars": {
     "MODEL": "test"
   }
