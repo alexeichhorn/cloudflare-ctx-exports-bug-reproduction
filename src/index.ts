@@ -9,7 +9,7 @@ export default {
       const outbound = ctx.exports.OutboundProbe({});
 
       const directRpc = await outbound.someOtherFunc();
-      const directFetchText = await (await outbound.fetch('https://example.com/repro')).text();
+      const directFetchText = await (await outbound.fetch(new Request('https://example.com/repro'))).text();
 
       const worker = env.LOADER.get('repro-worker', () => ({
         compatibilityDate: '2026-02-25',
