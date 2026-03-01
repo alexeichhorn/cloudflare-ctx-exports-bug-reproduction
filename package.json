@@ -12,7 +12,7 @@
     "deploy:version": "wrangler versions upload"
   },
   "devDependencies": {
-    "typescript": "^5.9.2",
-    "wrangler": "^4.55.0"
+    "typescript": "5.9.3",
+    "wrangler": "4.68.1"
   }
 }
