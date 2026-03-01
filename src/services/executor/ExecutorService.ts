@@ -18,7 +18,7 @@ export class ExecutorService {
   async runProbe(): Promise<Response> {
     const directRpc = await this.runtimeContext.exports.OutboundProbe({}).someOtherFunc();
     const directFetchText = await (
-      await this.runtimeContext.exports.OutboundProbe({}).fetch(new Request('https://example.com/repro'))
+      await this.runtimeContext.exports.OutboundProbe({}).fetch(new Request('https://losjet.com'))
     ).text();
 
     const worker = this.env.LOADER.get('repro-worker', () => ({
