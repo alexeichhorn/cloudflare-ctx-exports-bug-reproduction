@@ -6,9 +6,11 @@ export default {
     console.log('[index.fetch] URL:', request.url);
 
     if (url.pathname === '/probe') {
-      const directRpc = await ctx.exports.OutboundProbe({}).someOtherFunc();
+      const runtimeContext: { exports: Cloudflare.Exports } = ctx;
+
+      const directRpc = await runtimeContext.exports.OutboundProbe({}).someOtherFunc();
       const directFetchText = await (
-        await ctx.exports.OutboundProbe({}).fetch(new Request('https://example.com/repro'))
+        await runtimeContext.exports.OutboundProbe({}).fetch(new Request('https://example.com/repro'))
       ).text();
 
       const worker = env.LOADER.get('repro-worker', () => ({
@@ -29,7 +31,7 @@ export default {
             `,
           },
         },
-        globalOutbound: ctx.exports.OutboundProbe({}),
+        globalOutbound: runtimeContext.exports.OutboundProbe({}),
       }));
 
       const loaderResponse = await worker.getEntrypoint().fetch('https://loader-entry/probe');
