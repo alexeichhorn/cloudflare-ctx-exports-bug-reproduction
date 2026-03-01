@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "cf-types": "wrangler types",
+    "build": "wrangler types && tsc --noEmit",
+    "deploy:version": "wrangler versions upload"
   },
   "devDependencies": {
     "typescript": "^5.9.2",
